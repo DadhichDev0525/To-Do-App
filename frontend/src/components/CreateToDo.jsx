@@ -6,7 +6,7 @@ import Input from "./Input"
 import { createsToDos} from "../store"
 import { RxCross2 } from "react-icons/rx";
 
-const CreateToDo = ({hideAddToDo,userId}) => {
+const CreateToDo = ({hideAddToDo,token}) => {
     const dispatch = useDispatch();
     const [inputs,setInputs] = useState({})
     const [labels, setLabels] = useState(['SubTitle1','SubTitle2'])
@@ -15,7 +15,7 @@ const CreateToDo = ({hideAddToDo,userId}) => {
     const handleSubmit =  (event)=>{
       event.preventDefault();
       if(Object.keys(inputs).length !== 0){
-        dispatch(createsToDos({userId,inputs}))
+        dispatch(createsToDos({inputs,token}))
       }  
       setInputs({})
       hideAddToDo()

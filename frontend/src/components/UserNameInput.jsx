@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { createUser } from "../store"
+
 import Input from "./Input"
 import Panel from "./Panel"
 import Button from "./Button"
@@ -10,7 +10,7 @@ const UserNameInput = () => {
     const[userName,setUserName] = useState('')
 
     const handleSave = ()=>{
-        dispatch(createUser(userName))
+        // dispatch(createUser(userName))
         setUserName('')
     }
 

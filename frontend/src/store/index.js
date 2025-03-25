@@ -1,21 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { todoReducer } from "./Slices/todoSlice";
-import { toggleExpand } from "./Slices/todoSlice";
-import { userReducer } from "./Slices/userSlice";
+import { todoReducer, toggleExpand } from "./Slices/todoSlice";
+import { subToDoReducer } from "./Slices/subToDoSlice";
+import { authReducer, logoutUser } from "./Slices/authSlice";
 
 export const store = configureStore({
-    reducer:{
-        user : userReducer,
-        todos : todoReducer,
-    }
-})
+  reducer: {
+    auth: authReducer,
+    todos: todoReducer,
+    subTodos: subToDoReducer,
+  },
+});
 
-export {toggleExpand};
+export { toggleExpand, logoutUser };
 
-export * from './Thunks/User'
-export * from './Thunks/fetchToDos'
-export * from './Thunks/createToDos'
-export * from './Thunks/deleteTodo'
-export * from './Thunks/deleteSubTodo'
-export * from './Thunks/updateToDo'
-export * from './Thunks/updateSubToDo'
+export * from "./Thunks/User";
+export * from "./Thunks/ToDosThunk";
+export * from "./Thunks/createToDos";
+export * from "./Thunks/subToDosThunk";
+

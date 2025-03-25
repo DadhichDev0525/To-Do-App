@@ -1,20 +1,41 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const fetchUser = createAsyncThunk('fetch/user', async()=>{
-    const response = await axios.get('http://localhost:5000/user')
+const API_URL = "http://localhost:4200/api/"
 
-    return response.data || [];
+export const signupUser = createAsyncThunk('auth/signup',async (userData,{rejectWithValue})=>{
+    try{
+        const response = await axios.post(`${API_URL}auth/signup`,userData)
+        return response.data;
+    }catch(error){
+        return rejectWithValue(error.response.data.message || "Signup failed")
+    }
 })
 
-const deleteUser = createAsyncThunk('delete/user',async(userId)=>{
-    await axios.delete(`http://localhost:5000/user/${userId}`)
-    return userId;
+export const loginUser = createAsyncThunk('auth/login',async( userData,{rejectWithValue})=>{
+    try{
+        const response = await axios.post(`${API_URL}auth/login`,userData)
+        const{token} = response.data;
+        
+        return token;
+    }catch(error){
+        return rejectWithValue(error.response.data.message || "Login failed")
+    }
 })
 
-const createUser = createAsyncThunk('create/user',async(userName)=>{
-   const response = await axios.post(`http://localhost:5000/user`,{name:userName})
-   return response.data;
+export const fetchUser = createAsyncThunk('fetch/user',async(_,{rejectWithValue})=>{
+    try{
+        const token = localStorage.getItem('token')
+        if(!token) throw new Error("No token found")
+
+        const response = await axios.get(`${API_URL}protected`,{
+            headers : {Authorization : `Bearer ${token}`}
+        })    
+        
+        return response.data
+    }catch (error) {
+        return rejectWithValue(error.response?.data?.message || "Failed to fetch profile");
+    }
 })
 
-export {fetchUser,deleteUser,createUser};
+

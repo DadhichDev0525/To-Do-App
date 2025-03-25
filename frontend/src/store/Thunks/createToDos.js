@@ -1,18 +1,25 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const createsToDos = createAsyncThunk('create/ToDos',async ({userId,inputs})=>{
-    const {title,...subTitles} = inputs
-    const formattedSubToDos = Object.keys(subTitles).reduce((acc, key, index) => {
-        acc[key] = { name: subTitles[key], completed: false };
-        return acc;
-      }, {});
-    const response = await axios.post("http://localhost:5000/ToDos",{
-        title: title,
-        username: userId,
-        subToDos : formattedSubToDos
-    })
-    return response.data
+const API_URL = 'http://localhost:4200/api'
+
+const createsToDos = createAsyncThunk('create/ToDos',async ({inputs,token})=>{
+    const {title,...subToDos} = inputs
+    
+    const response1 = await axios.post(`${API_URL}/todos`,
+        {title},
+        {headers:{ Authorization : `Bearer ${token}` }}
+    )
+    const todoId = response1.data._id;
+    let response2
+    if(subToDos){
+            response2 = await axios.post(`${API_URL}/subtodos`,
+            {todoId,subToDos},
+            {headers:{ Authorization : `Bearer ${token}` }}
+        )
+    }
+   
+    return { todo:response1.data, subtodos:response2.data}
    
 })
 
