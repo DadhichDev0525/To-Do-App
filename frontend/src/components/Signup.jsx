@@ -68,7 +68,7 @@ const Signup = () => {
               type={show ? "text" : "password"}
               id="password"
               name="password"
-              value={user.password}
+              value={user.password || ''}
               onChange={(e) => handleChange("password", e.target.value)}
               minLength={8}
               placeholder="Create your Password"

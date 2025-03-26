@@ -13,6 +13,7 @@ const authSlice = createSlice({
         logoutUser : (state,action)=>{
             state.user = null;
             state.token = null;
+            state.error = null;
             localStorage.removeItem("token");
         }
     },
@@ -36,7 +37,6 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.token = action.payload;
-                localStorage.setItem("token",action.payload)
                 state.loading = false;
             })
             .addCase(loginUser.rejected, (state, action) => {

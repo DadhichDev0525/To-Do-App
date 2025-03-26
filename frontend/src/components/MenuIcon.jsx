@@ -5,7 +5,7 @@ const MenuIcon = ({onMenuOpen, activeMenu, menuId, onDelete, onEdit}) => {
 
 
   return (
-    <div onClick={()=>onMenuOpen(isOpen ? null : menuId)} className='cursor-pointer relative mr-5' >
+    <div onClick={()=>onMenuOpen(isOpen ? null : menuId)} className='cursor-pointer relative mr-1 sm:mr-5' >
               <CiMenuKebab/>
               {
                 isOpen && 

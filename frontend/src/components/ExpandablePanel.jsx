@@ -15,18 +15,18 @@ function ExpandablePanel({ header, children, menuIcon, onMenuOpen, isExpanded, o
 
   return (
     <div className="mb-2 border rounded ">
-      <div   className=" flex justify-between items-center p-3">
+      <div   className=" flex justify-between items-center px-2 sm:p-3">
         <div onClick={handleClick} className="flex  items-center h-12 w-full  " >
           {header}
         </div>
-        <div className='flex gap-2 '>
+        <div className='flex '>
          {menuIcon && <>{menuIcon}</>}
           <div onClick={handleClick} className='cursor-pointer' >
            {isExpanded ? <GoChevronDown /> : <GoChevronLeft />}
           </div>
         </div>
       </div>
-      {isExpanded && <div className="p-2 border-t">{children}</div>}
+      {isExpanded && <div className="border-t">{children}</div>}
     </div>
   );
 }

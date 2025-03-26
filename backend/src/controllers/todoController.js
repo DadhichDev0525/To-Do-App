@@ -1,4 +1,5 @@
 import Todo from "../models/todo.js";
+import SubTodo from "../models/subtodo.js";
 
 export const getTodos = async(req,res)=>{
     try{
@@ -25,8 +26,10 @@ export const createTodo = async (req,res)=>{
 
 export const deleteTodo = async(req,res)=>{
     try{
-        await Todo.findByIdAndDelete(req.params.id)
-        res.status(200).json({message:"Todo Deleted"})
+        const todoId = req.params.id
+        await SubTodo.deleteMany({todoId})
+        await Todo.findByIdAndDelete(todoId)
+        res.status(200).json({message:"Todo and associated Subtodos Deleted"})
     }catch(error){
         res.status(500).json({message : "Server Error",error})
     }

@@ -6,11 +6,12 @@ import CreateToDo from "./components/CreateToDo";
 import { logoutUser,fetchUser } from "./store";
 import Button from "./components/Button";
 import { RxCross2 } from "react-icons/rx";
+import Panel from "./components/Panel";
 
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {user, token} = useSelector((state) => state.auth);
+  const {user, token,error} = useSelector((state) => state.auth);
   const [showAddToDo, setShowAddToDo] = useState(false);
   // let userName;
   // if(user.length !==0){
@@ -29,7 +30,7 @@ const App = () => {
 
   return (
     <div className="h-[100vh]  bg-black">
-      <div className="pt-10 pl-5">
+      <div className="mt-3 sm:mt-10 ml-3 sm:ml-5">
         <Button
           disabled={showAddToDo}
           onClick={() => setShowAddToDo(!showAddToDo)}
@@ -40,11 +41,12 @@ const App = () => {
           Add To-Do
         </Button>
       </div>
-      {user && (
-        <div className="flex justify-center w-1/2 m-auto items-center rounded-md bg-white gap-10 group py-5 text-3xl font-semibold ring-4 ring-gray-400 cursor-pointer">
+      {error ? <Panel>{error.message}</Panel> 
+      : user && (
+        <div className="flex justify-between sm:justify-center m-3 sm:w-1/2 sm:m-auto items-center rounded-sm bg-white gap-10 group p-2 sm:py-5 text-2xl  sm:text-3xl font-semibold ring-2 sm:ring-4 ring-gray-400 cursor-pointer">
           <h1>{`${user?.firstname}'s ToDos`}</h1>
           <div
-            className="opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300"
+            className=" sm:opacity-0 sm:invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300"
             onClick={handleDeleteUser}
           >
             <RxCross2 />

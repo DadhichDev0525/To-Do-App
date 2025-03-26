@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../Slices/authSlice";
 
 const API_URL = "http://localhost:4200/api/"
 
@@ -16,6 +18,8 @@ export const loginUser = createAsyncThunk('auth/login',async( userData,{rejectWi
     try{
         const response = await axios.post(`${API_URL}auth/login`,userData)
         const{token} = response.data;
+
+        localStorage.setItem("token",token)
         
         return token;
     }catch(error){
@@ -34,6 +38,12 @@ export const fetchUser = createAsyncThunk('fetch/user',async(_,{rejectWithValue}
         
         return response.data
     }catch (error) {
+        const dispacth = useDispatch();
+        if(error.response?.status === 401){
+            alert('Session Expired, Please login again!')
+            dispacth(logoutUser())
+            window.location.href ='/login'
+        }
         return rejectWithValue(error.response?.data?.message || "Failed to fetch profile");
     }
 })

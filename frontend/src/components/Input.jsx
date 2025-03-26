@@ -3,7 +3,7 @@ import classNames from "classnames";
 const Input = ({ value, onChange, className, ...rest }) => {
   const { name, label } = rest;
 
-  const classes = classNames("p-3 my-2 border rounded w-full", className);
+  const classes = classNames("p-1 sm:p-3 my-2 border rounded w-full", className);
 
   return (
     <div>

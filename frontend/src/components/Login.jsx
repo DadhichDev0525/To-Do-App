@@ -46,7 +46,7 @@ const Login = () => {
               type={show ? "text" : "password"}
               id="password"
               name="password"
-              value={credentials.password}
+              value={credentials.password || ''}
               onChange={(e)=>handleChange('password',e.target.value)}
               placeholder="Enter your Password"
               className="p-3 w-full outline-0"

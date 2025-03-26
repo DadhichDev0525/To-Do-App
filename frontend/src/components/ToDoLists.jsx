@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { deleteTodo, fetchToDos, toggleExpand, updateToDo, fetchSubTodos } from "../store"
+import { deleteTodo, fetchToDos, toggleExpand, updateToDo, fetchSubTodos,store } from "../store"
 import Button from "./Button"
 import ExpandablePanel from "./ExpandablePanel"
 import Input from "./Input"
@@ -16,30 +16,31 @@ const ToDoLists = () => {
  const {isLoading , data, error,expandedToDoId} = useSelector((state)=>{
     return state.todos
   })
-  const { data: subTodos } = useSelector((state) => state.subTodos)
   const [activeMenu,setActiveMenu] = useState(null)
   const [editingTodoId, setEditingTodoId] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
-  const [editedSubTodos, setEditedSubTodos] = useState({});
 
 
   useEffect(()=>{
     dispatch(fetchToDos())
   },[dispatch,])
 
-  const hasSubTodos = (todoId) => {
-        dispatch(fetchSubTodos(todoId))
-    return subTodos.some(subTodo => subTodo.todoId === todoId);
-  }
+  // const hasSubTodos = (todoId) => {
+  //   return subTodos.some(subTodo => subTodo.todoId === todoId);
+  // };
 
-  const handleEditClick = (todo)=> {
+  const handleEditClick = async (todo)=> {
     setEditingTodoId(todo._id);
     setEditedTitle(todo.title);
 
-    if(expandedToDoId !== todo._id){
-      dispatch(toggleExpand(hasSubTodos(todo._id) ? todo._id : null))
-    }
-    
+    await dispatch(fetchSubTodos(todo._id)).unwrap()
+
+    const subTodos = store.getState().subTodos.data;
+    const hasSubs = subTodos.some(subTodo => subTodo.todoId === todo._id)
+
+      if (expandedToDoId !== todo._id) {
+        dispatch(toggleExpand(hasSubs ? todo._id : null));
+      }
 }
 
 const handleSave = (todo) => {
@@ -82,7 +83,7 @@ let content;
                  <Button 
                    primary
                    onClick ={()=> handleSave(todo)}  
-                   className='py-2.5 ml-5 rounded'
+                   className='py-1.5 sm:py-2.5 ml-2 sm:ml-5 rounded'
                  > Save
                  </Button>        
                </div>
@@ -90,18 +91,18 @@ let content;
      )
 
       return <ExpandablePanel
-                 className='mb-3' 
                  key={todo._id} 
                  header={ panelHeading}
                  isExpanded={expandedToDoId === todo._id}
                  onToggle ={()=> handleToggleExpand(todo._id)}
-                 menuIcon={
+                 menuIcon={ !editingTodoId && 
                  <MenuIcon 
                  onMenuOpen={setActiveMenu} 
                  activeMenu={activeMenu} 
                  menuId={todo.title} 
                  onDelete={()=>handleDeleteToDo(todo._id)} 
-                 onEdit = {()=>handleEditClick(todo)} />}
+                 onEdit = {()=>handleEditClick(todo)} />
+                }
                  onMenuOpen = {setActiveMenu}
               >
                 <SubToDoList
@@ -115,7 +116,7 @@ let content;
 
 
   return (
-    <Panel className= 'm-5 p-5 min-w-2xs ' >
+    <Panel className= 'm-3 sm:m-5 sm:p-5 min-w-min ' >
       {content}
       </Panel>
   )

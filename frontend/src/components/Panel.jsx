@@ -2,7 +2,7 @@ import classNames from 'classnames';
 
 function Panel({ children, className, ...rest }) {
   const finalClassNames = classNames(
-    ' rounded-md p-3 shadow border border-white bg-black text-white',
+    ' rounded-md p-2 sm:p-3 shadow border border-white bg-black text-white',
     className
   );
 
