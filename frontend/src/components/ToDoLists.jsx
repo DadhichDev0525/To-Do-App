@@ -10,7 +10,7 @@ import Skeleton from "./Skeleton"
 import SubToDoList from "./SubToDoList"
 
 
-const ToDoLists = () => {
+const ToDoLists = ({token,user}) => {
   const dispatch = useDispatch()
 
  const {isLoading , data, error,expandedToDoId} = useSelector((state)=>{
@@ -22,12 +22,11 @@ const ToDoLists = () => {
 
 
   useEffect(()=>{
-    dispatch(fetchToDos())
-  },[dispatch,])
+    if(token && user){
+      dispatch(fetchToDos())
+    }
+  },[dispatch])
 
-  // const hasSubTodos = (todoId) => {
-  //   return subTodos.some(subTodo => subTodo.todoId === todoId);
-  // };
 
   const handleEditClick = async (todo)=> {
     setEditingTodoId(todo._id);
@@ -65,10 +64,10 @@ const handleSave = (todo) => {
 let content;
   if(isLoading){
     content = <Skeleton times={5} className= 'h-12 w-full' />
-  }else if (data?.length === 0) {
+  }else if(error){
+    content = <div>Error fetching data...</div>
+   }else if (data?.length === 0) {
     content = <div className="p-3 text-2xl">No To-Dos found.</div>;
-  } else if(error){
-   content = <div>Error fetching data...</div>
   }else{
     content = data?.map(todo=>{
      const panelHeading = (  

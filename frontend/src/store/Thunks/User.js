@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "../Slices/authSlice";
 
 const API_URL = "http://localhost:4200/api/"
+let sessionAlertShown = false
 
 export const signupUser = createAsyncThunk('auth/signup',async (userData,{rejectWithValue})=>{
     try{
@@ -27,7 +28,7 @@ export const loginUser = createAsyncThunk('auth/login',async( userData,{rejectWi
     }
 })
 
-export const fetchUser = createAsyncThunk('fetch/user',async(_,{rejectWithValue})=>{
+export const fetchUser = createAsyncThunk('fetch/user',async(_,{rejectWithValue,dispatch})=>{
     try{
         const token = localStorage.getItem('token')
         if(!token) throw new Error("No token found")
@@ -38,11 +39,16 @@ export const fetchUser = createAsyncThunk('fetch/user',async(_,{rejectWithValue}
         
         return response.data
     }catch (error) {
-        const dispacth = useDispatch();
+        console.log(error)
         if(error.response?.status === 401){
-            alert('Session Expired, Please login again!')
-            dispacth(logoutUser())
-            window.location.href ='/login'
+           if (!sessionAlertShown) {
+            sessionAlertShown = true;
+          alert("Session Expired, Please login again!");
+          dispatch(logoutUser())
+          window.location.replace('/login')
+        }
+
+            return rejectWithValue("Unauthorized");
         }
         return rejectWithValue(error.response?.data?.message || "Failed to fetch profile");
     }

@@ -54,6 +54,7 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
   const handleAddSubToDo = () => {
     setIsAddingNewSubTodo(true);
     setEditingSubToDoKey("new");
+    setEditedSubtitle('')
   };
 
   const handleCancelAddSubToDo = () => {
@@ -63,9 +64,8 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
   };
 
   const handleSaveNewSubToDo = () => {
-    const subtodoToSave = editedSubTodos[subToDoId];
 
-    if (!subtodoToSave.title || subtodoToSave.title.trim() === "") {
+    if (!editedSubTitle || editedSubTitle.trim() === "") {
       alert("SubToDo cannot be empty!");
       return;
     }
