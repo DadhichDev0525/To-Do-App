@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Panel from "./Panel";
-import MenuIcon from "./menuIcon";
+import MenuIcon from "./MenusIcon";
 import Skeleton from "./Skeleton";
 import Input from "./Input";
 import Button from "./Button";
@@ -54,7 +54,7 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
   const handleAddSubToDo = () => {
     setIsAddingNewSubTodo(true);
     setEditingSubToDoKey("new");
-    setEditedSubtitle('')
+    setEditedSubtitle("");
   };
 
   const handleCancelAddSubToDo = () => {
@@ -64,7 +64,6 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
   };
 
   const handleSaveNewSubToDo = () => {
-
     if (!editedSubTitle || editedSubTitle.trim() === "") {
       alert("SubToDo cannot be empty!");
       return;
