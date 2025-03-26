@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { deleteTodo, fetchToDos, toggleExpand, updateToDo, fetchSubTodos,store } from "../store"
+import { deleteTodo, fetchToDos, toggleExpand, updateToDo, fetchSubTodos,store,getWeather } from "../store"
 import Button from "./Button"
 import ExpandablePanel from "./ExpandablePanel"
 import Input from "./Input"
@@ -9,17 +9,21 @@ import Panel from "./Panel"
 import Skeleton from "./Skeleton"
 import SubToDoList from "./SubToDoList"
 
+const outdoorKeywords = ["walk", "jog","exercise", "run", "hike", "trek", "cycling", "picnic", "beach", "camp", "outdoor", "park", "swimming"];
 
 const ToDoLists = ({token,user}) => {
   const dispatch = useDispatch()
 
- const {isLoading , data, error,expandedToDoId} = useSelector((state)=>{
+ const {isLoading , data:todos, error,expandedToDoId} = useSelector((state)=>{
     return state.todos
   })
+  const { data: weather } = useSelector((state) => state.weather)
   const [activeMenu,setActiveMenu] = useState(null)
   const [editingTodoId, setEditingTodoId] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
-
+  const outdoorTask = todos.find(todo =>
+    outdoorKeywords.some(keyword => todo.title.toLowerCase().includes(keyword))
+  );
 
   useEffect(()=>{
     if(token && user){
@@ -27,6 +31,12 @@ const ToDoLists = ({token,user}) => {
     }
   },[dispatch])
 
+  useEffect(() => {
+    if (outdoorTask) {
+      dispatch(getWeather("Jaipur")); 
+    }
+  }, [dispatch, outdoorTask]);
+  
 
   const handleEditClick = async (todo)=> {
     setEditingTodoId(todo._id);
@@ -66,10 +76,18 @@ let content;
     content = <Skeleton times={5} className= 'h-12 w-full' />
   }else if(error){
     content = <div>Error fetching data...</div>
-   }else if (data?.length === 0) {
+   }else if (todos?.length === 0) {
     content = <div className="p-3 text-2xl">No To-Dos found.</div>;
   }else{
-    content = data?.map(todo=>{
+    content = <>
+    {weather && (
+        <div className="bg-zinc-800 p-3 rounded mb-3">
+          <h3 className="font-bold">Weather for Outdoor Activities:</h3>
+          <p>🌡️ Temp: {weather.main.temp}°C</p>
+          <p>🌦️ Condition: {weather.weather[0].description}</p>
+        </div>
+      )}
+   {todos?.map(todo=>{
      const panelHeading = (  
                editingTodoId === todo._id ?
                <div className="flex  items-center w-full" onClick={(e)=>e.stopPropagation()}>
@@ -110,7 +128,8 @@ let content;
                  onToDoEdit={()=>handleSave(todo)}
                  />    
              </ExpandablePanel>
-    })
+    })}
+    </>
   }
 
 

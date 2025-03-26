@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../store";
 import { Link, useNavigate } from "react-router-dom";
 import Panel from "./Panel";
@@ -10,6 +10,7 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {error} = useSelector(state=>state.auth)
   const [user, setUser] = useState({});
   const [show, setShow] = useState(false);
 
@@ -27,10 +28,15 @@ const Signup = () => {
   return (
     <div className="h-[100vh] w-full flex justify-center items-center">
       <Panel className="min-w-2xs md:p-10 p-3">
+        <form onSubmit={handleSubmit} className="md:space-y-5">
         <h1 className="w-full text-center font-semibold text-3xl md:mb-8 mb-3">
           Register
         </h1>
-        <form onSubmit={handleSubmit} className="md:space-y-5">
+        {error && (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+            {error}
+          </div>
+        )}
           <div className="flex flex-col sm:flex-row gap-x-5">
             <Input
               type="text"

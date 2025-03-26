@@ -53,7 +53,6 @@ const authSlice = createSlice({
             .addCase(fetchUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-                console.log(action.payload,action.error)
             });
     },
 })

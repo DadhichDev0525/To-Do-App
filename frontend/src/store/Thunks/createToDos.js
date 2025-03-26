@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_URL } from "../../utils/constant";
 
-const API_URL = 'http://localhost:4200/api'
 
 const createsToDos = createAsyncThunk('create/ToDos',async ({inputs,token})=>{
     const {title,...subToDos} = inputs
