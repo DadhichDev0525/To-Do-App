@@ -55,7 +55,7 @@ const Login = () => {
               value={credentials.password || ''}
               onChange={(e)=>handleChange('password',e.target.value)}
               placeholder="Enter your Password"
-              className="p-3 w-full outline-0"
+              className="p-1 sm:p-3 w-full outline-0"
               required
             />
             <div className="cursor-pointer" onClick={() => setShow(!show)}>

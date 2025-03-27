@@ -78,7 +78,7 @@ const Signup = () => {
               onChange={(e) => handleChange("password", e.target.value)}
               minLength={8}
               placeholder="Create your Password"
-              className="p-3 w-full outline-0"
+              className="p-1 sm:p-3 w-full outline-0"
               required
             />
             <div className="cursor-pointer" onClick={() => setShow(!show)}>
