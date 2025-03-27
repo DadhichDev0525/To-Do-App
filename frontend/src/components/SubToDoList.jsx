@@ -47,6 +47,7 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
       setEditingSubToDoKey(null);
     }
   }, [editingTodoId, subToDos]);
+
   const handleDeleteSubToDo = (subToDoId) => {
     dispatch(deleteSubTodo(subToDoId));
   };
@@ -78,6 +79,9 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
   const handleEditClick = (subToDo) => {
     setEditingSubToDoKey(subToDo._id);
     setEditedSubtitle(subToDo.title);
+    setEditedSubTodos({
+      [subToDo._id]: subToDo,
+    })
   };
 
   const handleSaveSubToDo = (subToDoId) => {
@@ -92,6 +96,7 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
     if (editingTodoId) onToDoEdit();
 
     setEditingSubToDoKey(null);
+    setEditedSubTodos({})
   };
 
   const handleComplete = (subToDoId) => {
@@ -99,7 +104,7 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
   };
 
   let content;
-  if (isLoading) {
+  if (isLoading.fetching) {
     content = <Skeleton times={2} className="h-12 w-full" />;
   } else if (error) {
     content = <div>Error fetching data...</div>;
@@ -183,10 +188,12 @@ const SubToDoList = ({ todoId, onToDoEdit, editingTodoId }) => {
               )}
               {!editingSubToDoKey && editingTodoId !== todoId && (
                 <div className="flex items-center  gap-x-2 sm:gap-x-10">
-                  <Checkbox
-                    onClick={() => handleComplete(subToDo._id)}
-                    checked={subToDo.completed}
-                  />
+                  {isLoading.togglingComplete ? <div className="w-5 h-5 border-2 border-gray-700 border-t-blue-500 rounded-full animate-spin" />
+                  : <Checkbox
+                  onClick={() => handleComplete(subToDo._id)}
+                  checked={subToDo.completed}
+                />
+                  }
                   <MenuIcon
                     onMenuOpen={setActiveMenu}
                     activeMenu={activeMenu}

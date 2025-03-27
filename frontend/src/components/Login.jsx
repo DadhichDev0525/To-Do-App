@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../store";
-import { Link,useNavigate } from "react-router-dom";
+import { loginUser, clearAuthError } from "../store";
+import { Link } from "react-router-dom";
 import Panel from "./Panel";
 import Input from "./Input";
 import Button from "./Button";
@@ -9,10 +9,13 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 const Login = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const {error} = useSelector(state=> state.auth)
   const [credentials, setCredentials] = useState({});
   const [show,setShow] =useState(false)
+
+  useEffect(()=>{
+    dispatch(clearAuthError())
+  },[dispatch])
 
   const handleChange = (name,value) => {
     setCredentials({
@@ -23,7 +26,6 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUser(credentials))
-    navigate('/')
   };
   return (
     <div className="h-[100vh] w-full flex justify-center items-center">
@@ -38,7 +40,7 @@ const Login = () => {
           <Input
             type="email"
             name="email"
-            value={credentials.username}
+            value={credentials.email || ''}
             label="UserName"
             onChange={handleChange}
             placeholder="Type your Email"

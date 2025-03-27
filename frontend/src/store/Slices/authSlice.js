@@ -10,11 +10,14 @@ const authSlice = createSlice({
         error: null,
     },
     reducers :{
-        logoutUser : (state,action)=>{
+        logoutUser : (state)=>{
             state.user = null;
             state.token = null;
             state.error = null;
             localStorage.removeItem("token");
+        },
+        clearAuthError: (state) => {
+            state.error = null;
         }
     },
     extraReducers(builder){
@@ -23,8 +26,9 @@ const authSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(signupUser.fulfilled, (state, action) => {
+            .addCase(signupUser.fulfilled, (state) => {
                 state.loading = false;
+                alert("User registered successfully, Login Now!")
             })
             .addCase(signupUser.rejected, (state, action) => {
                 state.loading = false;
@@ -57,5 +61,5 @@ const authSlice = createSlice({
     },
 })
 
-export const {logoutUser} = authSlice.actions;
+export const {logoutUser, clearAuthError} = authSlice.actions;
 export const authReducer = authSlice.reducer;

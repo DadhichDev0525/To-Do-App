@@ -10,8 +10,8 @@ const MenuIcon = ({onMenuOpen, activeMenu, menuId, onDelete, onEdit}) => {
               {
                 isOpen && 
                 <div className='flex flex-col shadow  text-white bg-black border absolute top-5 right-0.5 rounded z-1'>
-                  <div onClick={onEdit} className='hover:bg-gray-700 py-3 px-8 border '>Edit</div>
-                  <div onClick={onDelete} className='hover:bg-gray-700 py-3 px-8 border '>Delete</div>
+                  <div onClick={onEdit} className='hover:bg-gray-700 py-1 px-5 sm:py-3 sm:px-8 border '>Edit</div>
+                  <div onClick={onDelete} className='hover:bg-gray-700 py-1 px-5 sm:py-3 sm:px-8 border '>Delete</div>
                 </div>
               }
               </div>

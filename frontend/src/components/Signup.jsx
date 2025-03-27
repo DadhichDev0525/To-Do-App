@@ -1,18 +1,22 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signupUser } from "../store";
-import { Link, useNavigate } from "react-router-dom";
+import { signupUser, clearAuthError} from "../store";
+import { Link} from "react-router-dom";
 import Panel from "./Panel";
 import Input from "./Input";
 import Button from "./Button";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 const Signup = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {error} = useSelector(state=>state.auth)
   const [user, setUser] = useState({});
   const [show, setShow] = useState(false);
+
+   useEffect(()=>{
+      dispatch(clearAuthError())
+    },[dispatch])
+
 
   const handleChange = (name, value) => {
     setUser({
@@ -23,7 +27,7 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(signupUser(user));
-    navigate('/login')
+    setUser({})
   };
   return (
     <div className="h-[100vh] w-full flex justify-center items-center">
@@ -41,7 +45,7 @@ const Signup = () => {
             <Input
               type="text"
               name="firstname"
-              value={user.firstName}
+              value={user.firstname ||''}
               label="FirstName"
               onChange={handleChange}
               placeholder="Enter your firstname"
@@ -50,7 +54,7 @@ const Signup = () => {
             <Input
               type="text"
               name="lastname"
-              value={user.lastName}
+              value={user.lastname || ''}
               label="LastName"
               onChange={handleChange}
               placeholder="Enter your lastname"
@@ -60,7 +64,7 @@ const Signup = () => {
           <Input
             type="email"
             name="email"
-            value={user.email}
+            value={user.email || ''}
             label="Email"
             onChange={handleChange}
             placeholder="Enter your email"

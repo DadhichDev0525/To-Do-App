@@ -8,6 +8,7 @@ let sessionAlertShown = false
 export const signupUser = createAsyncThunk('auth/signup',async (userData,{rejectWithValue})=>{
     try{
         const response = await axios.post(`${API_URL}/auth/signup`,userData)
+        window.location.replace('/login')
         return response.data;
     }catch(error){
         return rejectWithValue(error.response.data.message || "Signup failed")
@@ -20,6 +21,8 @@ export const loginUser = createAsyncThunk('auth/login',async( userData,{rejectWi
         const{token} = response.data;
 
         localStorage.setItem("token",token)
+
+        window.location.replace('/')
         
         return token;
     }catch(error){

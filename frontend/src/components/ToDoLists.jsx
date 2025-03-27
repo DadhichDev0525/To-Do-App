@@ -44,7 +44,7 @@ const ToDoLists = ({ token, user }) => {
   } = useSelector((state) => {
     return state.todos;
   });
-  const { data: weather } = useSelector((state) => state.weather);
+  const { data: weather,loading, error: weatherError } = useSelector((state) => state.weather);
   const [activeMenu, setActiveMenu] = useState(null);
   const [editingTodoId, setEditingTodoId] = useState(null);
   const [editedTitle, setEditedTitle] = useState("");
@@ -109,8 +109,10 @@ const ToDoLists = ({ token, user }) => {
     content = <div className="p-3 text-2xl">No To-Dos found.</div>;
   } else {
     content = (
-      <>
-        {weather && (
+      <>   
+        {weatherError && <div>Error fetching Weather data...</div>}
+        {loading ? <Skeleton times={1} className='h-16 w-full'  /> 
+        : weather && (
           <div className="bg-zinc-800 p-3 rounded mb-3">
             <h3 className="font-bold">Weather for Outdoor Activities:</h3>
             <p>🌡️ Temp: {weather.main.temp}°C</p>

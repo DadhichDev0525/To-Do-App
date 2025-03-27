@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { todoReducer, toggleExpand } from "./Slices/todoSlice";
 import { subToDoReducer } from "./Slices/subToDoSlice";
-import { authReducer, logoutUser } from "./Slices/authSlice";
+import { authReducer, logoutUser, clearAuthError} from "./Slices/authSlice";
 import weatherReducer from "./Slices/weatherSlice";
 
 export const store = configureStore({
@@ -13,7 +13,7 @@ export const store = configureStore({
   },
 });
 
-export { toggleExpand, logoutUser };
+export { toggleExpand, logoutUser, clearAuthError };
 
 export * from "./Thunks/User";
 export * from "./Thunks/ToDosThunk";
